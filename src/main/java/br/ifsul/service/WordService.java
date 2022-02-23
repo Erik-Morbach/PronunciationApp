@@ -16,7 +16,7 @@ public class WordService {
 	static private final WordComparator comparator = new WordComparator();
 
 	@Autowired
-	WordRepository wordRepository;
+	private WordRepository wordRepository;
 
 	public Word getRandom() {
 		Long maxIndex = this.wordRepository.findMaxIndex();

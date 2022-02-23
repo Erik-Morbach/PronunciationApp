@@ -16,7 +16,7 @@ public class PronunciationApplication {
 	}
 	
 	@Bean
-	public WordService test(WordService service) {
+	public WordService testRandomAndSimilar(WordService service) {
 		Word myWord = service.getRandom();
 		System.out.println(myWord);
 		System.out.println(service.getSimilar(myWord));
