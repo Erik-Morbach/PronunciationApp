@@ -25,6 +25,7 @@ public class WordService {
 	}
 	
 	public List<Word> getSimilar(Word w){
+		if(w==null) return null;
 		List<Word> response = (List<Word>) this.wordRepository.findAll();
 		comparator.setSource(w.getText());
 		response.sort(comparator);
