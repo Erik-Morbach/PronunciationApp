@@ -15,11 +15,17 @@ public class PronunciationApplication {
 		SpringApplication.run(PronunciationApplication.class, args);
 	}
 	
-	@Bean
+	//@Bean
 	public WordService testRandomAndSimilar(WordService service) {
 		Word myWord = service.getRandom();
 		System.out.println(myWord);
-		System.out.println(service.getSimilar(myWord));
+		System.out.println(service.getSimilar(myWord,3));
+		return service;
+	}
+	
+	@Bean 
+	WordService testFindOccurrence(WordService service) {
+		System.out.println(service.findOccurrence("ar"));
 		return service;
 	}
 	
