@@ -17,6 +17,10 @@ public class WordService {
 
 	@Autowired
 	private WordRepository wordRepository;
+	
+	public Word save(Word w) {
+		return this.wordRepository.save(w);
+	}
 
 	public Word getRandom() {
 		Long maxIndex = this.wordRepository.findMaxIndex();
@@ -24,11 +28,19 @@ public class WordService {
 		return this.wordRepository.findWithIndexGraterThan(wordIndex);
 	}
 	
-	public List<Word> getSimilar(Word w){
+	public List<Word> getSimilar(Word w, int quantity){
 		if(w==null) return null;
 		List<Word> response = (List<Word>) this.wordRepository.findAll();
 		comparator.setSource(w.getText());
 		response.sort(comparator);
-		return response.subList(0, 3);
+		return response.subList(0, quantity);
+	}
+
+	public List<Word> findOccurrence(String w){
+		return this.wordRepository.findOccurrence(w);
+	}
+
+	public List<Word> findOccurrence(Word w){
+		return this.wordRepository.findOccurrence(w.getText());
 	}
 }
