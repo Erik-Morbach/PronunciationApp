@@ -33,6 +33,7 @@ public class WordService {
 		List<Word> response = (List<Word>) this.wordRepository.findAll();
 		comparator.setSource(w.getText());
 		response.sort(comparator);
+		quantity = Math.min(quantity, response.size());
 		return response.subList(0, quantity);
 	}
 
