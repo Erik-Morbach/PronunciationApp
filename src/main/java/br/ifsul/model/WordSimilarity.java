@@ -1,4 +1,4 @@
-package br.isdapfsul.model;
+package br.ifsul.model;
 
 import br.ifsul.model.Word;
 import lombok.Getter;
