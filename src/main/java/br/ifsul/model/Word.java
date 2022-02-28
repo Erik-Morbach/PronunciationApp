@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,8 +32,11 @@ public class Word {
 			orphanRemoval = true
 	)
 	private List<Phrase> phrases;
+
+	@ManyToMany
+	private List<Word> similarWords;
 	
 	public String toString() {
-		return text + " ~= " + pronunciation;
+		return text + " [ " + pronunciation + " ]";
 	}
 }

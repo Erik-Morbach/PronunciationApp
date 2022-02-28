@@ -1,8 +1,9 @@
-package br.ifsul.service;
+package br.ifsul.controller;
 
 import java.util.List;
 import java.util.Random;
 
+import br.ifsul.repository.PhraseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,14 +12,17 @@ import br.ifsul.model.Word;
 import br.ifsul.repository.WordRepository;
 
 @Service
-public class WordService {
+public class Controller {
 	static private final Random randomGenerator = new Random();
 	static private final WordComparator comparator = new WordComparator();
 
 	@Autowired
 	private WordRepository wordRepository;
-	
+	@Autowired
+	private PhraseRepository phraseRepository;
+
 	public Word save(Word w) {
+		// Realizar operação em tabela de similaridades
 		return this.wordRepository.save(w);
 	}
 
@@ -36,12 +40,7 @@ public class WordService {
 		quantity = Math.min(quantity, response.size());
 		return response.subList(0, quantity);
 	}
-
 	public List<Word> findOccurrence(String w){
 		return this.wordRepository.findOccurrence(w);
-	}
-
-	public List<Word> findOccurrence(Word w){
-		return this.wordRepository.findOccurrence(w.getText());
 	}
 }
