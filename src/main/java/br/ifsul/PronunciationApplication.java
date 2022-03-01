@@ -1,7 +1,9 @@
 package br.ifsul;
 
 import br.ifsul.controller.Controller;
-import br.ifsul.view.UIApp;
+
+import java.util.Scanner;
+
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -15,18 +17,47 @@ public class PronunciationApplication {
 
 	public static void main(String[] args) {
 		SpringApplicationBuilder sab = new SpringApplicationBuilder(PronunciationApplication.class);
-		sab.headless(false);
+		//sab.headless(false);
 		ConfigurableApplicationContext cac = sab.run(args);
+		@SuppressWarnings("unused")
 		PronunciationApplication app = (PronunciationApplication) cac.getBean("pronunciationApplication");
-		UIApp ui = new UIApp();
 	}
 	
 	@Bean
+	Controller testSimilars(Controller controller) {
+		for(Word w: controller.findAllWords()) {
+			System.out.println(w);
+			System.out.println(controller.findSimilarWords(w, 3));
+			System.out.println("--------------------");
+		}
+		return controller;
+	}
+	
+	//@Bean 
+	Controller test(Controller controller) {
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Quantity: ");
+		int quantity = sc.nextInt();
+		while(quantity-->0) {
+			System.out.print("Word Pronun: ");
+			String wordText = sc.next();
+			String pronun = sc.next();
+			Word nw = new Word();
+			nw.setText(wordText);
+			nw.setPronunciation(pronun);
+			controller.registerWord(nw);
+			System.out.println(controller.findSimilarWords(nw, 3));
+		}
+		sc.close();
+		return controller;
+	}
+
+	//@Bean
 	public Controller testRandomAndSimilar(Controller controller) {
 		Word myWord = controller.getRandom();
 		System.out.println(myWord);
 
-		System.out.println(controller.getSimilar(myWord,3));
+		System.out.println(controller.findSimilarWords(myWord,3));
 		return controller;
 	}
 	

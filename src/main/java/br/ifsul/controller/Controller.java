@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import br.ifsul.comparator.WordComparator;
 import br.ifsul.model.Word;
+import br.ifsul.model.WordSimilarity;
 import br.ifsul.repository.WordRepository;
+import br.ifsul.repository.WordSimilarityRepository;
 
 @Service
 public class Controller {
@@ -18,12 +20,28 @@ public class Controller {
 
 	@Autowired
 	private WordRepository wordRepository;
+	@SuppressWarnings("unused")
 	@Autowired
 	private PhraseRepository phraseRepository;
+	@Autowired
+	private WordSimilarityRepository wordSimilarityRepository;
+	
+	public List<Word> findAllWords(){
+		return this.wordRepository.findAll();
+	}
 
-	public Word save(Word w) {
+	public Word registerWord(Word w) {
 		// Realizar operação em tabela de similaridades
-		return this.wordRepository.save(w);
+		List<Word> response = this.wordRepository.findAll();
+		comparator.setSource(w.getText());
+		response.sort(comparator);
+		w = this.wordRepository.save(w);
+		for(int i=0;i<Math.min(3,response.size());i++) {
+			WordSimilarity newSimilarity = new WordSimilarity(w,response.get(i),
+															  comparator.computeSimilarity(response.get(i).getText()));
+			this.wordSimilarityRepository.save(newSimilarity);
+		}
+		return w;
 	}
 
 	public Word getRandom() {
@@ -32,13 +50,10 @@ public class Controller {
 		return this.wordRepository.findWithIndexGraterThan(wordIndex);
 	}
 	
-	public List<Word> getSimilar(Word w, int quantity){
+	public List<Word> findSimilarWords(Word w, int quantity){
 		if(w==null) return null;
-		List<Word> response = (List<Word>) this.wordRepository.findAll();
-		comparator.setSource(w.getText());
-		response.sort(comparator);
-		quantity = Math.min(quantity, response.size());
-		return response.subList(0, quantity);
+		List<Long> ids = this.wordSimilarityRepository.findSimilarWords(w.getId(), quantity);
+		return this.wordRepository.findAllById(ids);
 	}
 	public List<Word> findOccurrence(String w){
 		return this.wordRepository.findOccurrence(w);

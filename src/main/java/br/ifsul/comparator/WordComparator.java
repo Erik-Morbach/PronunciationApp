@@ -15,7 +15,7 @@ public class WordComparator implements Comparator<Word> {
     	this.source = source; 
 	}
 
-    private Integer compute(String s) {
+    public Integer computeSimilarity(String s) {
         return memoization.computeIfAbsent(s, new Function<String, Integer>() {
             @Override
             public Integer apply(String t) {
@@ -42,6 +42,12 @@ public class WordComparator implements Comparator<Word> {
     }
     @Override
     public int compare(Word w1, Word w2) {
-        return Integer.compare(compute(w1.getText()), compute(w2.getText()));
+    	Integer s1 = computeSimilarity(w1.getText());
+    	Integer s2 = computeSimilarity(w2.getText());
+    	if(s1==s2) {
+    		s1 = Math.abs(w1.getText().length() - this.source.length());
+    		s2 = Math.abs(w2.getText().length() - this.source.length());
+    	}
+    	return Integer.compare(s1, s2);
     }
 }

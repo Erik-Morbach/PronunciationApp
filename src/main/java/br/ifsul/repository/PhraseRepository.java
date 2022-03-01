@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import br.ifsul.model.Phrase;
 
 public interface PhraseRepository extends JpaRepository<Phrase, Long>{
-    @Query("SELECT p FROM Phrase p WHERE p.wordId = ?1")
+    @Query("SELECT p FROM Phrase p WHERE p.word.id=?1")
 	public List<Phrase> findByWordId(Long wordId);
 }

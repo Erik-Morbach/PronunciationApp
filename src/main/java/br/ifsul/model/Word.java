@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.ManyToMany;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,14 +27,11 @@ public class Word {
 	@OneToMany(
 			fetch = FetchType.LAZY,
 			mappedBy = "word",
-			cascade = CascadeType.PERSIST,
+			cascade = CascadeType.REMOVE,
 			orphanRemoval = true
 	)
 	private List<Phrase> phrases;
 
-	@ManyToMany
-	private List<Word> similarWords;
-	
 	public String toString() {
 		return text + " [ " + pronunciation + " ]";
 	}
