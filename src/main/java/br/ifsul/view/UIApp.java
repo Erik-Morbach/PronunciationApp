@@ -1,46 +1,41 @@
 package br.ifsul.view;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+import br.ifsul.controller.Controller;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class UIApp extends JFrame {
+public class UIApp extends JFrame{
+    private JPanel panel;
+    private JButton telaCadastroButton;
+    private JButton telaPesquisaButton;
+    private JButton telaSorteioButton;
+    private Controller controller;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4848460689493732316L;
-	private JPanel contentPane;
+    public UIApp(Controller controller) {
+        super("Pronuncia!");
+        this.setSize(400,400);
+        this.add(this.panel);
+        this.controller = controller;
+        telaCadastroButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                UIRegister screen = new UIRegister(controller);
+                screen.setVisible(true);
+            }
+        });
+        telaPesquisaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UIApp frame = new UIApp();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+            }
+        });
+        telaSorteioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-	/**
-	 * Create the frame.
-	 */
-	public UIApp() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
-	}
-
+            }
+        });
+    }
 }

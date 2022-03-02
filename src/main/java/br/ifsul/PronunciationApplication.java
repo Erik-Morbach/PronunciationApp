@@ -4,26 +4,31 @@ import br.ifsul.controller.Controller;
 
 import java.util.Scanner;
 
+import br.ifsul.view.UIApp;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
 
 import br.ifsul.model.Word;
 
 
 @SpringBootApplication
 public class PronunciationApplication {
+	@Autowired 
+	private Controller controller;
 
 	public static void main(String[] args) {
 		SpringApplicationBuilder sab = new SpringApplicationBuilder(PronunciationApplication.class);
-		//sab.headless(false);
+		sab.headless(false);
 		ConfigurableApplicationContext cac = sab.run(args);
 		@SuppressWarnings("unused")
 		PronunciationApplication app = (PronunciationApplication) cac.getBean("pronunciationApplication");
+		UIApp view = new UIApp(app.controller);
+		view.setVisible(true);
 	}
 	
-	@Bean
+	//@Bean
 	Controller testSimilars(Controller controller) {
 		for(Word w: controller.findAllWords()) {
 			System.out.println(w);
