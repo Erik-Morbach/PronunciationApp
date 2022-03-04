@@ -1,8 +1,11 @@
 package br.ifsul.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
+import br.ifsul.model.Phrase;
 import br.ifsul.repository.PhraseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,37 +28,57 @@ public class Controller {
 	private PhraseRepository phraseRepository;
 	@Autowired
 	private WordSimilarityRepository wordSimilarityRepository;
-	
-	public List<Word> findAllWords(){
-		return this.wordRepository.findAll();
-	}
 
+	// USAR NA TELA CADASTRO
 	public Word registerWord(Word w) {
-		// Realizar operação em tabela de similaridades
 		List<Word> response = this.wordRepository.findAll();
 		comparator.setSource(w.getText());
 		response.sort(comparator);
-		w = this.wordRepository.save(w);
+		Word newWord = this.wordRepository.save(w);
 		for(int i=0;i<Math.min(3,response.size());i++) {
-			WordSimilarity newSimilarity = new WordSimilarity(w,response.get(i),
-															  comparator.computeSimilarity(response.get(i).getText()));
+			Integer similarity = comparator.computeSimilarity(response.get(i).getText());
+			WordSimilarity newSimilarity = new WordSimilarity(w,response.get(i), similarity);
 			this.wordSimilarityRepository.save(newSimilarity);
 		}
-		return w;
+		return newWord;
 	}
 
-	public Word getRandom() {
+	// USAR NA TELA DE PALAVRA ALEATÓRIA
+	public Word getRandomWord() {
 		Long maxIndex = this.wordRepository.findMaxIndex();
 		Long wordIndex = randomGenerator.nextLong(maxIndex+1);
 		return this.wordRepository.findWithIndexGraterThan(wordIndex);
 	}
-	
-	public List<Word> findSimilarWords(Word w, int quantity){
-		if(w==null) return null;
-		List<Long> ids = this.wordSimilarityRepository.findSimilarWords(w.getId(), quantity);
-		return this.wordRepository.findAllById(ids);
+
+	// USAR NA TELA DE PESQUISA
+	public List<Word> searchWords(String text){
+		if(text == null)
+			return null;
+		return this.wordRepository.searchByText(text);
 	}
-	public List<Word> findOccurrence(String w){
-		return this.wordRepository.findOccurrence(w);
+
+	// USAR NA TELA DE DETALHES
+	public Word findWordById(Long wordId) {
+		if(wordId == null)
+			return null;
+		Word word = this.wordRepository.findById(wordId).get();
+		List<Phrase> phrases = this.phraseRepository.findByWordId(wordId);
+		word.setPhrases(phrases);
+		List<WordSimilarity> wordSimilarities = this.wordSimilarityRepository.findByWordId(wordId);
+		if(wordSimilarities == null)
+			return word;
+		ArrayList similarWordIds = new ArrayList<Long>();
+		for (WordSimilarity wordSimilarity : wordSimilarities) {
+			similarWordIds.add(wordSimilarity.getW1Id());
+		}
+		List<Word> similarWords = this.wordRepository.findAllById(similarWordIds);
+		word.setSimilarWords(similarWords);
+		return word;
 	}
 }
+
+//	public List<Word> findSimilarWords(Word w, int quantity){
+//		if(w==null) return null;
+//		List<Long> ids = this.wordSimilarityRepository.findSimilarWords(w.getId(), quantity);
+//		return this.wordRepository.findAllById(ids);
+//	}

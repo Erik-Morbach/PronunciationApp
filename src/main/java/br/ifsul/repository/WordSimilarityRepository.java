@@ -17,4 +17,6 @@ public interface WordSimilarityRepository extends JpaRepository<WordSimilarity, 
 		   nativeQuery=true)
 	List<Long> findSimilarWords(Long wordId, int quantity);
 
+	@Query("SELECT * FROM word_similarity WHERE w1Id=?1 ORDER BY similarity DESC LIMIT 3")
+	List<WordSimilarity> findByWordId(Long wordId);
 }

@@ -1,22 +1,24 @@
 package br.ifsul.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class WordSimilarity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+	@Column
+	private Long w1Id;
+	@Column
+	private Word w2Id;
     @ManyToOne
     private Word w1;
     @ManyToOne

@@ -32,6 +32,8 @@ public class Word {
 	)
 	private List<Phrase> phrases;
 
+	private List<Word> similarWords;
+
 	public String toString() {
 		return text + " [ " + pronunciation + " ]";
 	}

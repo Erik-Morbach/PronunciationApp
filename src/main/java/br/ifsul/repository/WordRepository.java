@@ -17,6 +17,6 @@ public interface WordRepository extends JpaRepository<Word, Long>{
 			nativeQuery=true)
 	public Word findWithIndexGraterThan(Long index);
 
-	@Query("SELECT w FROM Word w WHERE w.text LIKE %?1%")
-	public List<Word> findOccurrence(String word);
+	@Query("SELECT w.id, w.text FROM Word w WHERE w.text LIKE %?1%")
+	public List<Word> searchByText(String word);
 }
