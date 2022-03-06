@@ -8,34 +8,23 @@ import java.awt.event.ActionListener;
 
 public class UIApp extends JFrame{
     private JPanel panel;
-    private JButton telaCadastroButton;
-    private JButton telaPesquisaButton;
-    private JButton telaSorteioButton;
-    private Controller controller;
+    private JButton screenRegisterBt;
+    private JButton screenSearchBt;
+    private JButton screenSortitionBt;
 
     public UIApp(Controller controller) {
         super("Pronuncia!");
         this.setSize(400,400);
         this.add(this.panel);
-        this.controller = controller;
-        telaCadastroButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                UIRegister screen = new UIRegister(controller);
-                screen.setVisible(true);
-            }
+        this.screenRegisterBt.addActionListener(e -> {
+            UIRegister screen = new UIRegister(controller);
+            screen.setVisible(true);
         });
-        telaPesquisaButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        this.screenSearchBt.addActionListener(e -> {
 
-            }
         });
-        telaSorteioButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        this.screenSortitionBt.addActionListener(e -> {
 
-            }
         });
     }
 }

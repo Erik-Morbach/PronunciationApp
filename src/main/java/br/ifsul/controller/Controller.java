@@ -1,6 +1,6 @@
 package br.ifsul.controller;
 
-import java.util.ArrayList;
+import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -8,6 +8,8 @@ import java.util.Random;
 import br.ifsul.model.Phrase;
 import br.ifsul.repository.PhraseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.ifsul.comparator.WordComparator;
@@ -23,7 +25,6 @@ public class Controller {
 
 	@Autowired
 	private WordRepository wordRepository;
-	@SuppressWarnings("unused")
 	@Autowired
 	private PhraseRepository phraseRepository;
 	@Autowired
@@ -40,14 +41,31 @@ public class Controller {
 			WordSimilarity newSimilarity = new WordSimilarity(w,response.get(i), similarity);
 			this.wordSimilarityRepository.save(newSimilarity);
 		}
-		return newWord;
+		return this.populateWord(newWord);
+	}
+
+	public Phrase registerPhrase(Phrase phrase){
+		return this.phraseRepository.save(phrase);
+	}
+	List<Word> findSimilarWords(Word word){
+		Pageable page = PageRequest.of(0,3);
+		List<Long> lis=  (this.wordSimilarityRepository.findSimilarWords(word,page));
+		return this.wordRepository.findAllById(lis);
+	}
+	
+	public Word populateWord(Word w) {
+		if(w==null) return null;
+		w.setPhrases(this.phraseRepository.findByWordId(w.getId()));
+		w.setSimilarWords(this.findSimilarWords(w));
+		return w;
 	}
 
 	// USAR NA TELA DE PALAVRA ALEATÓRIA
 	public Word getRandomWord() {
 		Long maxIndex = this.wordRepository.findMaxIndex();
 		Long wordIndex = randomGenerator.nextLong(maxIndex+1);
-		return this.wordRepository.findWithIndexGraterThan(wordIndex);
+		Word w = this.wordRepository.findWithIndexGraterThan(wordIndex);
+		return this.populateWord(w);
 	}
 
 	// USAR NA TELA DE PESQUISA
@@ -56,29 +74,12 @@ public class Controller {
 			return null;
 		return this.wordRepository.searchByText(text);
 	}
-
+	
 	// USAR NA TELA DE DETALHES
 	public Word findWordById(Long wordId) {
 		if(wordId == null)
 			return null;
-		Word word = this.wordRepository.findById(wordId).get();
-		List<Phrase> phrases = this.phraseRepository.findByWordId(wordId);
-		word.setPhrases(phrases);
-		List<WordSimilarity> wordSimilarities = this.wordSimilarityRepository.findByWordId(wordId);
-		if(wordSimilarities == null)
-			return word;
-		ArrayList similarWordIds = new ArrayList<Long>();
-		for (WordSimilarity wordSimilarity : wordSimilarities) {
-			similarWordIds.add(wordSimilarity.getW1Id());
-		}
-		List<Word> similarWords = this.wordRepository.findAllById(similarWordIds);
-		word.setSimilarWords(similarWords);
-		return word;
+		Optional<Word> opt = this.wordRepository.findById(wordId);
+		return opt.map(this::populateWord).orElse(null);
 	}
 }
-
-//	public List<Word> findSimilarWords(Word w, int quantity){
-//		if(w==null) return null;
-//		List<Long> ids = this.wordSimilarityRepository.findSimilarWords(w.getId(), quantity);
-//		return this.wordRepository.findAllById(ids);
-//	}

@@ -1,16 +1,15 @@
 package br.ifsul;
 
 import br.ifsul.controller.Controller;
-
-import java.util.Scanner;
-
+import br.ifsul.model.Word;
 import br.ifsul.view.UIApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 
-import br.ifsul.model.Word;
+import java.time.Clock;
 
 
 @SpringBootApplication
@@ -22,21 +21,21 @@ public class PronunciationApplication {
 		SpringApplicationBuilder sab = new SpringApplicationBuilder(PronunciationApplication.class);
 		sab.headless(false);
 		ConfigurableApplicationContext cac = sab.run(args);
-		@SuppressWarnings("unused")
 		PronunciationApplication app = (PronunciationApplication) cac.getBean("pronunciationApplication");
 		UIApp view = new UIApp(app.controller);
 		view.setVisible(true);
 	}
 	
-	//@Bean
-	//	Controller testSimilars(Controller controller) {
-	//		for(Word w: controller.findAllWords()) {
-	//			System.out.println(w);
-	//			System.out.println(controller.findSimilarWords(w, 3));
-	//			System.out.println("--------------------");
-	//		}
-	//		return controller;
-	//	}
+	@Bean
+	Controller testSimilars(Controller controller) {
+		for(Word w: controller.searchWords("")) {
+			controller.populateWord(w);
+			System.out.println(w);
+			System.out.println(w.getSimilarWords());
+			System.out.println("--------------------");
+		}
+		return controller;
+	}
 	//
 	//	//@Bean
 	//	Controller test(Controller controller) {
@@ -51,7 +50,7 @@ public class PronunciationApplication {
 	//			nw.setText(wordText);
 	//			nw.setPronunciation(pronun);
 	//			controller.registerWord(nw);
-	//			System.out.println(controller.findSimilarWords(nw, 3));
+	//			System.out.println(nw.getSimilarWords());
 	//		}
 	//		sc.close();
 	//		return controller;
@@ -59,10 +58,10 @@ public class PronunciationApplication {
 
 	//@Bean
 	//	public Controller testRandomAndSimilar(Controller controller) {
-	//		Word myWord = controller.getRandom();
+	//		Word myWord = controller.getRandomWord();
 	//		System.out.println(myWord);
 	//
-	//		System.out.println(controller.findSimilarWords(myWord,3));
+	//		System.out.println(myWord.getSimilarWords());
 	//		return controller;
 	//	}
 

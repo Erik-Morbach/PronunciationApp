@@ -9,14 +9,14 @@ import br.ifsul.model.Word;
 
 public interface WordRepository extends JpaRepository<Word, Long>{
 	@Query("SELECT MAX(w.id) FROM Word w")
-	public Long findMaxIndex();
+	Long findMaxIndex();
 
 	@Query(value="SELECT * FROM word w WHERE w.id>=?1 "
 			+ "ORDER BY w.id "
 			+ "LIMIT 1", 
 			nativeQuery=true)
-	public Word findWithIndexGraterThan(Long index);
+	Word findWithIndexGraterThan(Long index);
 
-	@Query("SELECT w.id, w.text FROM Word w WHERE w.text LIKE %?1%")
-	public List<Word> searchByText(String word);
+	@Query("SELECT w FROM Word w WHERE w.text LIKE %?1%")
+	List<Word> searchByText(String word);
 }

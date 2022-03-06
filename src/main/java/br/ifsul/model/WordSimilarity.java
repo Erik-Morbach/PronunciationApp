@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 
 @Entity
@@ -15,10 +16,6 @@ public class WordSimilarity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-	@Column
-	private Long w1Id;
-	@Column
-	private Word w2Id;
     @ManyToOne
     private Word w1;
     @ManyToOne
@@ -33,6 +30,6 @@ public class WordSimilarity {
 	}
 	
 	public Word getOther(Word w) {
-		return (w.getId()==w1.getId()? w2 : w1);
+		return (Objects.equals(w.getId(), w1.getId()) ? w2 : w1);
 	}
 }
