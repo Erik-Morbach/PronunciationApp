@@ -10,7 +10,7 @@ public class UIApp extends JFrame{
     private JPanel panel;
     private JButton screenRegisterBt;
     private JButton screenSearchBt;
-    private JButton screenSortitionBt;
+    private JButton screenSortWordBt;
 
     public UIApp(Controller controller) {
         super("Pronuncia!");
@@ -21,9 +21,10 @@ public class UIApp extends JFrame{
             screen.setVisible(true);
         });
         this.screenSearchBt.addActionListener(e -> {
-
+            UISearch screen = new UISearch(controller);
+            screen.setVisible(true);
         });
-        this.screenSortitionBt.addActionListener(e -> {
+        this.screenSortWordBt.addActionListener(e -> {
 
         });
     }
