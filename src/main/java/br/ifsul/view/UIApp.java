@@ -25,7 +25,8 @@ public class UIApp extends JFrame{
             screen.setVisible(true);
         });
         this.screenSortWordBt.addActionListener(e -> {
-
+            UISoritition screen = new UISoritition(controller);
+            screen.setVisible(true);
         });
     }
 }

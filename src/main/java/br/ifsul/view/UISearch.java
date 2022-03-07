@@ -13,12 +13,12 @@ public class UISearch extends JFrame {
     private JPanel panel1;
     private JList<Word> wordListComponent;
     private JButton searchButton;
-    private JLabel Phrases;
-    private JTextArea phrasesTextField;
-    private JLabel SimilarWords;
-    private JTextField similarWordField1;
-    private JTextField similarWordField2;
-    private JTextField similarWordField3;
+    private JTextArea phrasesTextArea;
+    private JTextField similarWordTextField1;
+    private JTextField similarWordTextField2;
+    private JTextField similarWordTextField3;
+    private JLabel PhrasesLabel;
+    private JLabel SimilarWordsLabel;
 
     private List<Word> wordList;
 
@@ -33,25 +33,25 @@ public class UISearch extends JFrame {
             wordListComponent.setModel(model);
         });
         wordListComponent.addListSelectionListener(e -> {
-            similarWordField1.setText("");
-            similarWordField2.setText("");
-            similarWordField3.setText("");
+            similarWordTextField1.setText("");
+            similarWordTextField2.setText("");
+            similarWordTextField3.setText("");
 
             Long wordId = wordListComponent.getSelectedValue().getId();
             Word word = controller.findWordById(wordId);
             List<Word> similarWords = word.getSimilarWords();
             String phraseText = word.getPhrasesString() == null ? "Essa palavra não possui frases" : word.getPhrasesString();
-            phrasesTextField.setText(phraseText);
+            phrasesTextArea.setText(phraseText);
             for (int i = 0; i < similarWords.size(); i++) {
                 switch (i) {
                     case 0:
-                        similarWordField1.setText(similarWords.get(0).toString());
+                        similarWordTextField1.setText(similarWords.get(0).toString());
                     break;
                     case 1:
-                        similarWordField2.setText(similarWords.get(1).toString());
+                        similarWordTextField2.setText(similarWords.get(1).toString());
                     break;
                     case 2:
-                        similarWordField3.setText(similarWords.get(2).toString());
+                        similarWordTextField3.setText(similarWords.get(2).toString());
                     break;
                 }
             }
