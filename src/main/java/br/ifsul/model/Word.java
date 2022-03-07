@@ -39,4 +39,14 @@ public class Word {
 	public String toString() {
 		return text + " [ " + pronunciation + " ]";
 	}
+
+	public String getPhrasesString() {
+		if(this.phrases.isEmpty())
+			return null;
+		String text = "";
+		for(Phrase phrase: this.phrases) {
+			text += phrase.getText() + " \n";
+		}
+		return text;
+	}
 }
